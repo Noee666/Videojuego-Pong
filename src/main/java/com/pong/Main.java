@@ -1,5 +1,6 @@
 package com.pong;
 
+import com.pong.game.GameLoop;
 import com.pong.view.GamePanel;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -25,11 +26,14 @@ public final class Main {
      */
     private static void createWindow() {
         var frame = new JFrame("Pong");
+        var panel = new GamePanel();
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
-        frame.setResizable(false);
-        frame.add(new GamePanel());
+        frame.add(panel);
         frame.pack();
+        frame.setResizable(false);
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
+
+        new GameLoop(panel::update, panel::repaint).start();
     }
 }
