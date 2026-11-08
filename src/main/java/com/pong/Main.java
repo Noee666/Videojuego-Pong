@@ -10,9 +10,13 @@ import javax.swing.SwingUtilities;
  * para iniciar la aplicación
  */
 public final class Main {
-    /// Prohíbe crear una instancia de esta clase
+    /**
+     * Prohíbe crear una instancia de esta clase
+     */
     private Main() { }
-    /// Ejecuta {@code javax.swing} en Event Dispatch Thread (hilo EDT)
+    /**
+     * Ejecuta {@code javax.swing} en Event Dispatch Thread (hilo EDT)
+     */
     public static void main(String[] args) {
         SwingUtilities.invokeLater(Main::createWindow);
     }
