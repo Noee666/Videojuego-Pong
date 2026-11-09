@@ -13,7 +13,8 @@ public final class Measures {
     // --- Paddle ---
     public static final int PADDLE_WIDTH = 4;
     public static final int PADDLE_HEIGHT = 30;
-    public static final int PADDLE_MARGIN = 15;
+    public static final double PADDLE_MARGIN_X = COURT_WIDTH * 0.02;
+    public static final double PADDLE_MARGIN_Y = (COURT_HEIGHT - PADDLE_HEIGHT) / 2.0;
     // --- Ball ---
     public static final int BALL_SIZE = 15;
 }
