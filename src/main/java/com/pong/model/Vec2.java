@@ -1,10 +1,10 @@
 package com.pong.model;
-/// Representa un vector 2D inmutable
+/// Un vector 2D inmutable
 ///
 /// Se usa tanto para posiciones como para velocidades
 ///
-/// @param x
-/// @param y
+/// @param x desplazamiento horizontal
+/// @param y desplazamiento vertical
 public record Vec2(double x, double y) {
     /// Suma los atributos de `this` con los de otro vector \
     /// del mismo tipo para crear otra instancia de `Vec2`
