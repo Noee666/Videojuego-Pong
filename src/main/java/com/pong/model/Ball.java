@@ -30,7 +30,6 @@ public final class Ball {
     /// Revierte la dirección en la que se mueve la bola en el eje x
     public void reverseX() {
         velocity = new Vec2(-velocity.x(), velocity.y());
-
     }
     /// Revierte la dirección en la que se mueve la bola en el eje y
     public void reverseY() {
