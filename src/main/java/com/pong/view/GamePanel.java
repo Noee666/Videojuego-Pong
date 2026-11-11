@@ -1,9 +1,14 @@
 package com.pong.view;
 
+import com.pong.model.Ball;
+import com.pong.model.Game;
+import com.pong.model.Paddle;
+
 import java.awt.Color;
 import java.awt.Dimension;
 import java.awt.Graphics;
 import java.awt.Graphics2D;
+import java.util.Objects;
 import javax.swing.JPanel;
 import static com.pong.model.Measures.*;
 /// Representa un `JPanel` adaptado para las necesidades de la aplicación
@@ -12,50 +17,47 @@ public final class GamePanel extends JPanel {
     private static final int MIDDLE_LINE_WIDTH = 2;
     private static final int MIDDLE_LINE_HEIGHT = 10;
     private static final int MIDDLE_LINE_GAP = 25;
-    // --- BallPos ---
-    private double ballX = (COURT_WIDTH - BALL_SIZE) / 2.0;
-    private double ballY = (COURT_HEIGHT - BALL_SIZE) / 2.0;
-    // --- BallSpeed ---
-    private double ballSpeedX = 300; // píxeles por segundo
-    private double ballSpeedY = 100; // píxeles por segundo
+
+    private final Game game;
     /// Crea y configura una instancia de `GamePanel`
-    public GamePanel() {
+    ///
+    /// @param game reglas que el juego está obligado a cumplir
+    public GamePanel(Game game) {
+        this.game = Objects.requireNonNull(game, "game must not be null");
         setPreferredSize(new Dimension(COURT_WIDTH, COURT_HEIGHT));
         setBackground(Color.BLACK);
     }
-
-    @Override
-    protected void paintComponent(Graphics g) {
-        super.paintComponent(g);
-        var g2 = (Graphics2D) g;
-        g2.setColor(Color.WHITE);
-
-        // Dibuja la línea divisora central
-        for (int y = 0; y < COURT_HEIGHT; y+=MIDDLE_LINE_GAP) {
-          g2.fillRect(COURT_WIDTH / 2 - (MIDDLE_LINE_WIDTH / 2), y,
-                      MIDDLE_LINE_WIDTH, MIDDLE_LINE_HEIGHT);
-        }
-        // Dibuja la paleta izquierda
-        g2.fillRect(PADDLE_MARGIN, COURT_HEIGHT / 2 - (PADDLE_HEIGHT / 2),
-                    PADDLE_WIDTH, PADDLE_HEIGHT);
-        // Dibuja la paleta derecha
-        g2.fillRect(COURT_WIDTH - PADDLE_MARGIN - PADDLE_WIDTH, COURT_HEIGHT / 2 - (PADDLE_HEIGHT / 2),
-                    PADDLE_WIDTH, PADDLE_HEIGHT);
-        // Dibuja la bola
-        g2.fillRect((int) Math.round(ballX), (int) Math.round(ballY),
-                    BALL_SIZE, BALL_SIZE);
-    }
-    /// Realiza un cálculo para determinar la nueva posición de la bola
+    /// {@inheritDoc}
     ///
-    /// @param deltaSeconds segundos transcurridos entre el frame anterior y el actual
-    public void update(double deltaSeconds) {
-        ballX += ballSpeedX * deltaSeconds;
-        if (ballX < 0 || ballX + BALL_SIZE > COURT_WIDTH) {
-            ballSpeedX = -ballSpeedX;
-        }
-        ballY += ballSpeedY * deltaSeconds;
-        if (ballY < 0 || ballY + BALL_SIZE > COURT_HEIGHT) {
-            ballSpeedY = -ballSpeedY;
+    /// @param graphics the <code>Graphics</code> object to protect
+    @Override
+    protected void paintComponent(Graphics graphics) {
+        super.paintComponent(graphics);
+        var graphics2D = (Graphics2D) graphics;
+        graphics2D.setColor(Color.WHITE);
+
+        drawMiddleLine(graphics2D);
+        drawBall(graphics2D, game.ball());
+        drawPaddle(graphics2D, game.leftPaddle());
+        drawPaddle(graphics2D, game.rightPaddle());
+    }
+
+    private void drawBall(Graphics2D graphics2D, Ball ball) {
+        var pos = ball.position();
+        graphics2D.fillRect((int) Math.round(pos.x()), (int) Math.round(pos.y()),
+                            BALL_SIZE, BALL_SIZE);
+    }
+
+    private void drawPaddle(Graphics2D graphics2D, Paddle paddle) {
+        var pos = paddle.position();
+        graphics2D.fillRect((int) Math.round(pos.x()), (int) Math.round(pos.y()),
+                            PADDLE_WIDTH, PADDLE_HEIGHT);
+    }
+
+    private void drawMiddleLine(Graphics2D graphics2D) {
+        for (int y = 0; y < COURT_HEIGHT; y += 20) {
+            graphics2D.fillRect((COURT_WIDTH - MIDDLE_LINE_WIDTH) / 2, y,
+                                MIDDLE_LINE_WIDTH, MIDDLE_LINE_HEIGHT);
         }
     }
 }
