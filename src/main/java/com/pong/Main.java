@@ -1,6 +1,7 @@
 package com.pong;
 
 import com.pong.game.GameLoop;
+import com.pong.model.Game;
 import com.pong.view.GamePanel;
 import javax.swing.JFrame;
 import javax.swing.SwingUtilities;
@@ -17,8 +18,10 @@ public final class Main {
     }
     /// Crea y configura el `JFrame` principal
     private static void createWindow() {
+        var game = new Game();
         var frame = new JFrame("Pong");
-        var panel = new GamePanel();
+        var panel = new GamePanel(game);
+        // --- Configuración del JFrame ---
         frame.setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
         frame.add(panel);
         frame.pack();
@@ -26,6 +29,8 @@ public final class Main {
         frame.setLocationRelativeTo(null);
         frame.setVisible(true);
 
-        new GameLoop(panel::update, panel::repaint).start();
+        new GameLoop(game::update, panel::repaint).start();
+
+
     }
 }
